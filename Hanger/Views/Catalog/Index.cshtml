@@ -1,0 +1,211 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Hanger.Models.Ad>
+
+@Styles.Render("~/css/new.css")
+
+
+@{ int j = 0;}
+
+@*<div style="padding-top: 70px;display: table; margin-left: 13%;" ><a href="index.html">Katalog</a> <a href="search.html" > > Damska Odzież</a> > Sukienki</div>*@
+   <h2 class="page-header"><img alt="Brand" src="~/Pictures/Icons/hanger.png" class="img-header"> @ViewBag.subcategory</h2>
+ @using (Html.BeginForm("Index", "Catalog", FormMethod.Get))
+    {<table class="table" style="width: initial;">
+        <tr>
+            <th>
+                <label class="control-label col-md-2" for="Size">Rozmiar</label>
+            </th>
+            <th>
+                <label class="control-label col-md-2" for="SizeId">Marka</label>
+            </th>
+            <th>
+                <label class="control-label col-md-2" for="SizeId">Kolor</label>
+            </th>
+            <th>
+                <label class="control-label col-md-2" for="SizeId">Stan</label>
+            </th>
+            <th>
+                <label class="control-label col-md-2" for="SizeId">Cena</label>
+            </th>
+
+            <th></th>
+        </tr>
+
+        <tr>
+            <td>
+                   @*@Html.DropDownList("Size", new SelectList(ViewBag.size,"value","text",ViewBag.CurrentSize))*@
+                   @*@Html.DropDownList("Size", ViewBag.CurrentSize  as string == ""? ViewBag.CurrentSize as string : "Wszystkie" )*@
+                   @Html.DropDownList("Size", "Wszystkie")
+                </td>
+                <td>
+                    @Html.DropDownList("Brand", "Wszystkie")
+                </td>
+                <td>
+                    @Html.DropDownList("Color", "Wszystkie")
+                </td>
+                <td>
+                    @*@Html.DropDownList("Condition", ViewBag.CurrentCondition  == null ?  "Wszystkie" : ViewBag.CurrentCondition as string)*@
+                    @Html.DropDownList("Condition", "Wszystkie")
+                </td>
+                <td>
+                    Od @Html.DropDownList("Price1", "")
+                    do @Html.DropDownList("Price2", "")
+                </td>
+                <td>
+                    <input type="submit"  value="" class="btn btn-search" style="padding: 0px; " />
+                    @Html.ActionLink(ViewBag.CurrentSort == "Price" ? "Cena malejąco  ▼" : "Cena rosnąco  ▲", "Index", new { sortOrder = ViewBag.ThemeSortParm, currentSize = ViewBag.CurrentSize, currentBrand = ViewBag.CurrentBrand, currentCondition = ViewBag.CurrentCondition, currentColor = ViewBag.CurrentColor, currentPrice1 = ViewBag.CurrentPrice1, currentPrice2 = ViewBag.CurrentPrice2,}, new { @class = "sorting" })
+                    @*ViewBag.CurrentSort=="Price"  ? "Cena malejąco  ▼"  : "Cena rosnąco  ▲"*@
+                    @*ViewBag.ThemeSortParm=="Price"  ?  "Cena rosnąco  ▲"  : "Cena malejąco  ▼"*@
+                </td>
+            </tr>
+        </table>
+        }
+
+
+
+
+
+    <div id="wrapper">
+        
+
+        @if (Model.Count() == 0)
+        {
+            <div class="no-items" style="text-align:center">Brak ogłoszeń</div>
+        }
+        else {
+        <div class="row">
+
+
+            @*@for (int i = 0; i < 16 && j>=0; i++)*@
+        @while (j <= Model.Count() - 1)
+
+        {
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 mb-4">
+                <div class="pin">
+                    <a href="@Url.Action("Product", "Ad", new { id =  Model.ElementAt(j).Id })" class="navbar-left">
+
+                        @{Boolean isPhoto = false; }
+                        @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
+                    {
+                        if (item.AdId == Model.ElementAt(j).Id && item.Main_photo == true && isPhoto == false)
+                        {
+
+                                <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" /><br />
+                                isPhoto = true;
+                            }
+
+                        }
+
+                        @if (isPhoto == false)
+                    {
+                            <img src="~/Pictures/dress.jpg" /><br />
+                        }
+
+                    </a>
+                    @if ((@Html.DisplayFor(p => p.ElementAt(j).Brand.Name)).ToString() == "")
+                    {
+                        <p class="alignright" style="width:100%">
+
+                            <b> @Html.DisplayFor(p => p.ElementAt(j).Price) zł</b>
+                        </p>
+
+                        if (Session["LogedUserID"] != null && ViewBag.FavoriteID.Contains(Model.ElementAt(j).Id))
+                        {
+                            <p class="alignleft">
+                                <img alt="Favourite" src="~/Pictures/Icons/favorite-heart.png" class="favourite" />
+
+
+                            </p>
+                            <p class="alignright brand">
+
+                                <b>@Html.DisplayFor(p => p.ElementAt(j).Size.Name)</b>
+
+                            </p>
+                        }
+
+                        else
+                        {
+                            <p class="alignright brand" style="width:100%">
+
+                                <b>@Html.DisplayFor(p => p.ElementAt(j).Size.Name)</b>
+
+                            </p>
+                        }
+
+                    }
+                    else
+                    {
+                        <p class="alignleft">
+
+                            <b>@Html.DisplayFor(p => p.ElementAt(j).Brand.Name)</b>
+                        </p>
+                        <p class="alignright">
+
+                            <b> @Html.DisplayFor(p => p.ElementAt(j).Price) zł</b>
+                        </p>
+                        if (Session["LogedUserID"] != null && ViewBag.FavoriteID.Contains(Model.ElementAt(j).Id))
+                        {
+                            <p class="alignleft">
+                                <img alt="Favourite" src="~/Pictures/Icons/favorite-heart.png" class="favourite" />
+
+                            
+                            </p>
+                            <p class="alignright brand">
+                               
+                                <b>@Html.DisplayFor(p => p.ElementAt(j).Size.Name)</b>
+                                
+                            </p>
+                        }
+
+                        else
+                        {
+                            <p class="alignright brand" style="width:100%">
+
+                                <b>@Html.DisplayFor(p => p.ElementAt(j).Size.Name)</b>
+
+                            </p>
+                        }
+                    }
+                </div>
+               
+            </div>
+                j++;
+
+                }
+     </div>
+                            }
+</div>
+
+
+@*@Html.PagedListPager(Model, page => Url.Action("Index", new { page}))*@
+@*@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort }))*@
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentSize=ViewBag.CurrentSize, currentBrand = ViewBag.CurrentBrand, currentCondition = ViewBag.CurrentCondition, currentColor = ViewBag.CurrentColor, currentPrice1 = ViewBag.CurrentPrice1, currentPrice2 = ViewBag.CurrentPrice2 }))
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+ <script> 
+
+   @* var y= document.getElementsByClassName("classname");
+    y.click(function () { y.css("border", "3px solid red"); });*@
+ 
+     $(".classname").click(function () {  $(".classname").css("border", "3px solid red"); })
+
+
+     $(".classname").click(function () {
+            try {
+                if (ViewBag.ThemeSortParmr == "Price") {
+                    $('.classname').text("Cana malejąco");
+                   
+                }
+                if (ViewBag.ThemeSortParmr == "price_desc") {
+                    $('.classname').text("Cena rosnąco");
+                }
+
+            } catch (e) {
+
+            }
+         })
+     
+        
+</script>
