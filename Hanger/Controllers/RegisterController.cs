@@ -107,7 +107,8 @@ namespace Hanger.Controllers
             SizeDropDownList();
             BrandDropDownList();
             ColorDropDownList();
-           // ColorDropDownList();
+            ColorDropDownList2();
+            // ColorDropDownList();
 
             return View();
         }
@@ -124,7 +125,7 @@ namespace Hanger.Controllers
                 {
                     up.UserId = (Session["LogedUserID"] as User).Id;
                     //A.Id = 23;
-                    up.Color2Id = 2;
+                    //up.Color2Id = 2;
                     //up.Color1Id = 1;
 
                     db.UserProfil.Add(up);
@@ -161,6 +162,7 @@ namespace Hanger.Controllers
                     SizeDropDownList(up.SizeId);
                     BrandDropDownList(up.BrandId);
                     ColorDropDownList(up.Color1Id);
+                    ColorDropDownList2(up.Color2Id);
 
 
 
@@ -177,8 +179,9 @@ namespace Hanger.Controllers
             SizeDropDownList(up.SizeId);
             BrandDropDownList(up.BrandId);
             ColorDropDownList(up.Color1Id);
+            ColorDropDownList2(up.Color2Id);
 
-           
+
 
             //return View(A);
             return RedirectToAction("AfterLogin", "Login");
@@ -202,6 +205,15 @@ namespace Hanger.Controllers
                             select d;
             ViewBag.Color1Id = new SelectList(sizeQuery, "Id", "Name", selectedColor);
         }
+
+        private void ColorDropDownList2(object selectedColor = null)
+        {
+            var sizeQuery = from d in db.Color
+                            orderby d.Name
+                            select d;
+            ViewBag.Color2Id = new SelectList(sizeQuery, "Id", "Name", selectedColor);
+        }
+
         private void BrandDropDownList(object selectedBrand = null)
         {
             var sizeQuery = from d in db.Brand
