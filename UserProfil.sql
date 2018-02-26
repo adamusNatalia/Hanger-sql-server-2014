@@ -1,9 +1,7 @@
-﻿CREATE TABLE [dbo].[UserProfil] (
+﻿CREATE TABLE [dbo].[Count] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Color1Id] int  NOT NULL,
-	[Color2Id] int NULL,
-    [SizeId] int NOT NULL,
-	[BrandId] int NOT NULL
+    [AdId] int  NOT NULL,
+	[Counter] int NULL,
 );
 GO
 

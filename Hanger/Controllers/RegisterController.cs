@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Hanger.Models;
 using System.Data.Entity.Infrastructure;
+using System.Net;
+using System.Data.Entity;
 
 namespace Hanger.Controllers
 {
@@ -188,6 +190,74 @@ namespace Hanger.Controllers
 
         }
 
+        public ActionResult EditProfil(int userId)
+        {
+            if (userId == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var u = from p in db.UserProfil
+                       where p.UserId == userId
+                       select p;
+            if (u.Count() == 0)
+            {
+                return RedirectToAction("NewProfil", "Register", new { id = userId });
+            }
+            int index = u.FirstOrDefault().Id;
+            UserProfil up = db.UserProfil.Find(index);
+
+            SizeDropDownList(up.SizeId);
+            BrandDropDownList(up.BrandId);
+            ColorDropDownList(up.Color1Id);
+            ColorDropDownList2(up.Color2Id);
+
+            return View(up);
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult EditProfil(UserProfil UP)
+        {
+            // ModelState.Remove("Date_start");
+            if (ModelState.IsValid)
+            {
+                UP.UserId = (Session["LogedUserID"] as User).Id;
+               
+                db.Entry(UP).State = EntityState.Modified;
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+                {
+                    Exception raise = dbEx;
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            string message = string.Format("{0}:{1}",
+                                validationErrors.Entry.Entity.ToString(),
+                                validationError.ErrorMessage);
+                            // raise a new exception nesting
+                            // the current instance as InnerException
+                            raise = new InvalidOperationException(message, raise);
+                        }
+                    }
+                    throw raise;
+                }
+                return RedirectToAction("AfterLogin", "Login");
+
+            }
+            
+            SizeDropDownList(UP.SizeId);
+            BrandDropDownList(UP.BrandId);
+            ColorDropDownList(UP.Color1Id);
+            ColorDropDownList2(UP.Color2Id);
+
+            return View(UP);
+        }
 
 
         private void SizeDropDownList(object selectedSize = null)

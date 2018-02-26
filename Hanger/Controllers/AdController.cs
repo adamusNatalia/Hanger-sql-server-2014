@@ -44,6 +44,9 @@ namespace Hanger.Controllers
             //DateTime dateAndTime = advertisement.Date_start;
             ViewBag.date = name;
 
+
+
+
             var ad = from s in db.Ad
                      select s;
             //ViewBag.AddCount = ad.Count();
@@ -54,19 +57,41 @@ namespace Hanger.Controllers
 
             if (Session["LogedUserID"] != null)
             {
-                int user= (Session["LogedUserID"] as User).Id; 
+                int user = (Session["LogedUserID"] as User).Id;
                 var fav = from s in db.Favourite
-                         where (s.UserId == user) && (s.AdId==Id)
-                         select s;
+                          where (s.UserId == user) && (s.AdId == Id)
+                          select s;
                 if (fav.Count() == 0)
                 {
                     ViewBag.isInFavourites = false;
                 }
             }
 
+            var counter = advertisement.FirstOrDefault().Counter;
+            if (counter == null)
+            {
+                advertisement.FirstOrDefault().Counter = 1;
+            }
+            else
+            {
+                int counter1 = advertisement.FirstOrDefault().Counter.GetValueOrDefault();
+                counter1++;
+                advertisement.FirstOrDefault().Counter = counter1;
+            }
+            db.Entry(advertisement.FirstOrDefault()).State = EntityState.Modified;
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+            }
 
-            return View(ad.ToList()); 
+
+            return View(ad.ToList());
         }
+        
         public ActionResult Photo1(int Id)
         {
             ViewBag.ad = Id;
