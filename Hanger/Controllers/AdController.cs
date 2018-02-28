@@ -243,40 +243,6 @@ namespace Hanger.Controllers
             return View(ad);
         }
 
-        //[HttpPost, ActionName("Edit")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EditPost(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var adToUpdate = db.Ad.Find(id);
-        //    if (TryUpdateModel(adToUpdate, "",
-        //       new string[] { "UserId", "Price", "Title", "Description", "SizeId", "ColorId", "SubcategoryId", "ConditionId", "Swap", "BrandId" }))
-        //    {
-        //        try
-        //        {
-        //            db.SaveChanges();
-
-        //            return RedirectToAction("Index");
-        //        }
-        //        catch (RetryLimitExceededException /* dex */)
-        //        {
-        //            //Log the error (uncomment dex variable name and add a line here to write a log.
-        //            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-        //        }
-        //    }
-
-        //    SizeDropDownList(adToUpdate.SizeId);
-        //    BrandDropDownList(adToUpdate.BrandId);
-        //    ColorDropDownList(adToUpdate.ColorId);
-        //    ConditionDropDownList(adToUpdate.ConditionId);
-        //    SubcategoryDropDownList(adToUpdate.SubcategoryId);
-        //    return RedirectToAction("Photo", "Ad", new { id = id });
-        //}
-
-
         [HttpPost]
         public ActionResult Edit(Ad A)
         {
@@ -696,8 +662,10 @@ namespace Hanger.Controllers
                 msg.Priority = MailPriority.Normal;
 
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+               
 
-                client.Credentials = new NetworkCredential("hanger.natalia@gmail.com", "hangertest");
+                //client.Credentials = new NetworkCredential("hanger.natalia@gmail.com", "hangertest");
+                client.Credentials = new NetworkCredential("tester.apo@gmail.com", "selenium");
 
                 client.EnableSsl = true;
 

@@ -37,6 +37,29 @@ namespace Hanger.Controllers
             //return View(user);
         }
 
+        public ActionResult Favorites(int id)
+        {
+            //User user = db.User.Find(id);
+            //ViewBag.userId = id;
+            //Ad advertisement = db.Ad.Find(Id);
+            var fav = (from s in db.Favourite
+                     where (s.UserId == id)
+                     select s.AdId).ToList();
+
+            var ad = from s in db.Ad
+                       where (fav.Contains(s.Id))
+                       select s;
+
+            User u = db.User.Find(id);
+            ViewBag.profilName = u.Profil_name;
+            if (ad.Count() == 0)
+            {
+                return RedirectToAction("NoItems", "UserProfil");
+            }
+            return View(ad.ToList());
+            //return View(user);
+        }
+
         public ActionResult Catalog(int id)
         {
             var ad = from s in db.Ad

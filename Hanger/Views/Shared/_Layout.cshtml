@@ -45,33 +45,7 @@
                             <li><a href="@Url.Action("New", "Catalog")" class="navbar-left">Nowości</a></li>
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Katalog <b class="caret"></b></a>
-                                <ul class="dropdown-menu multi-level">
-                                  
-                                    @*<li><a href="#">One more separated link</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li class="dropdown-submenu">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
-                                                <ul class="dropdown-menu">
-                                                    <li class="dropdown-submenu">
-                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a href="#">Action</a></li>
-                                                            <li><a href="#">Another action</a></li>
-                                                            <li><a href="#">Something else here</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="#">Separated link</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="#">One more separated link</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>*@
-                                  
+                                <ul class="dropdown-menu multi-level">                                  
                                     <li class="dropdown-submenu">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Damska Odzież</a>
                                         <ul class="dropdown-menu">
@@ -120,10 +94,16 @@
                             @if (Session["LogedUserID"] != null)
                             {
                                 <li class="icon" style="margin-top:-7px;">
-                                    <a href="@Url.Action("UserProfil", "UserProfil", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <img alt="Brand" src="~/Pictures/Icons/user3.png" style="width:40px">
-                                    </a>
-                                </li>
+                                        <b class="caret"></b>
+                                     </a>
+                                    <ul class="dropdown-menu multi-level">
+                                        <li><a href="@Url.Action("UserProfil", "UserProfil",new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Twoje przedmioty</a></li>                                     
+                                        <li><a href="@Url.Action("Favorites", "UserProfil",new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Ulubione przedmioty</a></li>
+                                        <li><a href="@Url.Action("EditProfil", "Register", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Edytuj profili</a></li>
+                                    </ul>
+                               </li>
                             }
                             @if (Session["LogedUserID"] != null)
                             {

@@ -85,19 +85,6 @@ namespace Hanger.Controllers
                                where p.Id == id 
                                select p;
 
-
-                    //if (v != null)
-                    //{
-                    //    //Session["LogedUserID"] = v.Id.ToString();
-                    //    Session["CurrentUserEmail"] = v.First();
-                    //    Session["LogedUserFullname"] = v.Profil_name.ToString();
-                    //    if (v.Profil_name.ToString() == "admin")
-                    //    {
-                    //        return RedirectToAction("AfterLoginAdmin");
-                    //    }
-                    //    return RedirectToAction("AfterLogin");
-                    //}
-
                     if (user.Count() != 0)
                     {
                         Session["LogedUserID"] = user.First();
@@ -190,18 +177,18 @@ namespace Hanger.Controllers
 
         }
 
-        public ActionResult EditProfil(int userId)
+        public ActionResult EditProfil(int id)
         {
-            if (userId == 0)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var u = from p in db.UserProfil
-                       where p.UserId == userId
+                       where p.UserId == id
                        select p;
             if (u.Count() == 0)
             {
-                return RedirectToAction("NewProfil", "Register", new { id = userId });
+                return RedirectToAction("NewProfil", "Register", new { id = id });
             }
             int index = u.FirstOrDefault().Id;
             UserProfil up = db.UserProfil.Find(index);
@@ -224,7 +211,14 @@ namespace Hanger.Controllers
             if (ModelState.IsValid)
             {
                 UP.UserId = (Session["LogedUserID"] as User).Id;
-               
+                int usId= (Session["LogedUserID"] as User).Id; 
+
+                var u = (from p in db.UserProfil
+                        where p.UserId == usId
+                        select p.Id).FirstOrDefault();
+                UP.Id = u;
+
+
                 db.Entry(UP).State = EntityState.Modified;
                 try
                 {

@@ -428,6 +428,7 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Register\NewProfil.cshtml" />
     <Content Include="Views\Register\EditProfil.cshtml" />
+    <Content Include="Views\UserProfil\Favorites.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
