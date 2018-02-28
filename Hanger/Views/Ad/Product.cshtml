@@ -238,7 +238,7 @@
                     using (Html.BeginForm("IsSold", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
                     {
                         @*@Html.Hidden("id", item.Id)*@
-                        <input type="submit" value="Sprzedane" class="btn btn-default" />
+                        <input type="submit" value="Oznacz jako sprzedane" class="btn btn-default" />
                     }
 
                     using (Html.BeginForm("Delete", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))

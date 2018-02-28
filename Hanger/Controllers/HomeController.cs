@@ -18,6 +18,7 @@ namespace Hanger.Controllers
             var ad = from s in db.Ad
                      select s;
 
+
             return View(ad.ToList());
 
         }
