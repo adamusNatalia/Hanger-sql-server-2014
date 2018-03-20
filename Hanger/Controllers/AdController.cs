@@ -29,6 +29,7 @@ namespace Hanger.Controllers
 
         public ActionResult Product(int Id)
         {
+            //MergeModel model = new MergeModel();
             // Ad advertisement = db.Ad.Find(Id);
             var advertisement = from a in db.Ad
                                 where (a.Id == Id)
@@ -88,6 +89,15 @@ namespace Hanger.Controllers
                 Exception raise = dbEx;
             }
 
+            var adds = (from s in db.Ad
+                        orderby s.Id
+                        select s.Id);
+
+            List<int> list = new List<int>();
+            list = adds.Take(3).ToList();
+
+            //ViewData["Recommendation"] = Recommendation(Id);
+            ViewData["Recommendation"] = list;
 
             return View(ad.ToList());
         }
@@ -749,6 +759,75 @@ namespace Hanger.Controllers
             //return RedirectToAction("New", "Home");
             return RedirectToAction("Product", "Ad", new { id = adId });
         }
+
+        public List<int> Recommendation(int Id) {
+
+
+            var adds = (from s in db.Ad
+                     
+                      select s.Id).Take(3);
+
+
+
+            // sprawdzam czy ktos dodal ogloszenie do ulubionych
+            var fav = from s in db.Favourite
+                        where (s.AdId == Id)
+                        select s;
+
+            if (fav.Count() == 0)
+            {
+                Random rnd = new Random();
+            
+                List<int> randomList = new List<int>();
+                var ad = (from s in db.Ad                                  
+                                    select s).ToList();
+
+                int a = rnd.Next(0, ad.Count());
+                randomList.Add(a);
+                for (int i = 0; i < 3; i++)
+                {
+                    while (randomList.Contains(a))
+                    {
+                        a = rnd.Next(0, ad.Count());
+
+                    }
+                }
+
+
+            }
+            return adds.ToList();
+               
+
+        }
+
+        
+   /*         
+
+            var counter = advertisement.FirstOrDefault().Counter;
+            if (counter == null)
+            {
+                advertisement.FirstOrDefault().Counter = 1;
+            }
+            else
+            {
+                int counter1 = advertisement.FirstOrDefault().Counter.GetValueOrDefault();
+                counter1++;
+                advertisement.FirstOrDefault().Counter = counter1;
+            }
+            db.Entry(advertisement.FirstOrDefault()).State = EntityState.Modified;
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+            }
+
+
+         
+        }
+*/
 
     }
 

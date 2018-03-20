@@ -78,9 +78,6 @@ namespace Hanger.Controllers
             if (ModelState.IsValid) // this is check validity
             {
 
-                
-                    Console.WriteLine("Zalogowano");
-                    //var v = db.User.Where(a => a.Profil_name.Equals(u.Profil_name) && a.Password.Equals(u.Password)).FirstOrDefault();
                     var user = from p in db.User
                                where p.Id == id 
                                select p;
@@ -113,9 +110,6 @@ namespace Hanger.Controllers
 
                 {
                     up.UserId = (Session["LogedUserID"] as User).Id;
-                    //A.Id = 23;
-                    //up.Color2Id = 2;
-                    //up.Color1Id = 1;
 
                     db.UserProfil.Add(up);
 

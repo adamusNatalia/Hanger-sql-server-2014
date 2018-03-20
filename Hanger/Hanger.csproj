@@ -220,6 +220,7 @@
       <DependentUpon>ModelHanger.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\MergeModel.cs" />
     <Compile Include="Models\Message.cs">
       <DependentUpon>ModelHanger.tt</DependentUpon>
     </Compile>
