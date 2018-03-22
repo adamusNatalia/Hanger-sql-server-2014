@@ -101,7 +101,7 @@ namespace Hanger.Controllers
 
             return View(ad.ToList());
         }
-        
+
         public ActionResult Photo1(int Id)
         {
             ViewBag.ad = Id;
@@ -171,9 +171,9 @@ namespace Hanger.Controllers
                     A.Date_start = DateTime.Now;
                     A.UserId = (Session["LogedUserID"] as User).Id;
                     //A.Id = 23;
-                    
+
                     db.Ad.Add(A);
-                    
+
                     //db.SaveChanges();
                     try
                     {
@@ -198,7 +198,7 @@ namespace Hanger.Controllers
                         throw raise;
                     }
                     ModelState.Clear();
-                    
+
                 }
                 else
                 {
@@ -231,7 +231,7 @@ namespace Hanger.Controllers
 
             //return View(A);
             return RedirectToAction("Photo1", "Ad", new { id = adId });
-            
+
         }
         public ActionResult Edit(int id)
         {
@@ -256,7 +256,7 @@ namespace Hanger.Controllers
         [HttpPost]
         public ActionResult Edit(Ad A)
         {
-           // ModelState.Remove("Date_start");
+            // ModelState.Remove("Date_start");
             if (ModelState.IsValid)
             {
                 A.UserId = (Session["LogedUserID"] as User).Id;
@@ -302,15 +302,15 @@ namespace Hanger.Controllers
             Swap.Add(new SelectListItem() { Text = "Nie", Value = "False" });
 
             ViewBag.Swap = new SelectList(Swap, "Value", "Text", selectedSwap);
-           
-         
+
+
         }
 
         private void SizeDropDownList(object selectedSize = null)
         {
             var sizeQuery = from d in db.Size
-                                   orderby d.Id
-                                   select d;
+                            orderby d.Id
+                            select d;
             ViewBag.SizeId = new SelectList(sizeQuery, "Id", "Name", selectedSize);
         }
         private void ColorDropDownList(object selectedColor = null)
@@ -356,15 +356,15 @@ namespace Hanger.Controllers
 
 
         public ActionResult Tiles()
-            {
-                ViewBag.Title = "Hanger";
-                return View();
-            }
+        {
+            ViewBag.Title = "Hanger";
+            return View();
+        }
 
         public ActionResult Details2()
         {
             var ad = from s in db.Ad
-                        select s;
+                     select s;
 
             return View(ad.ToList());
         }
@@ -419,14 +419,14 @@ namespace Hanger.Controllers
                 if (db.Photos != null && db.Photos.Count() != 0)
                 {
                     p.Id = (from ph in db.Photos
-                                 select ph.Id).Max() + 1;
+                            select ph.Id).Max() + 1;
                 }
                 else
                     p.Id = 0;
 
-               // p.OwnerId = (Session["CurrentUserEmail"] as User).UserId;
-                p.AdId= (from ad in db.Ad
-                         select ad.Id).Max();
+                // p.OwnerId = (Session["CurrentUserEmail"] as User).UserId;
+                p.AdId = (from ad in db.Ad
+                          select ad.Id).Max();
                 p.Type = file.ContentType;
                 db.Photos.Add(p);
                 db.SaveChanges();
@@ -501,7 +501,7 @@ namespace Hanger.Controllers
                 db.SaveChanges();
             }
             //return RedirectToAction("New", "Home");
-            return RedirectToAction("Photo", "Ad",new { id = adId });
+            return RedirectToAction("Photo", "Ad", new { id = adId });
         }
         public ActionResult ZoomPhoto(int adId)
         {
@@ -611,18 +611,18 @@ namespace Hanger.Controllers
                                      where p.AdId == adId
                                      select p);
                 while (photoToDelete.Count() > 0)
-                {   
+                {
                     DataContext.Photos.Remove(photoToDelete.FirstOrDefault());
                     DataContext.SaveChanges();
                 }
                 var ad = (from p in DataContext.Ad
-                                     where p.Id == adId
-                                     select p).FirstOrDefault();
+                          where p.Id == adId
+                          select p).FirstOrDefault();
 
                 DataContext.Ad.Remove(ad);
                 DataContext.SaveChanges();
             }
-            
+
             return RedirectToAction("UserProfil", "UserProfil", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id });
         }
 
@@ -643,7 +643,7 @@ namespace Hanger.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMail2(string email, string body, string subject, string to, int id )
+        public ActionResult SendMail2(string email, string body, string subject, string to, int id)
         {
             if (email != "" && subject != "" && body != "")
             {
@@ -659,20 +659,20 @@ namespace Hanger.Controllers
                 msg.To.Add(emailTo);
                 //msg.To.Add("hanger.natalia@gmail.com");de
                 //msg.From = new MailAddress(email);
-                msg.From = new MailAddress("hanger.natalia@gmail.com",email);
+                msg.From = new MailAddress("hanger.natalia@gmail.com", email);
                 //msg.Sender = new MailAddress(email);
 
                 msg.Subject = subject;
 
-                msg.Body = "Dzień dobry," + Environment.NewLine 
-                    + Environment.NewLine + @"Użytkownik "+@email+" jest zainteresowany Twoim ogłoszeniem: http://localhost:15054/Ad/Product/" + adId + Environment.NewLine
+                msg.Body = "Dzień dobry," + Environment.NewLine
+                    + Environment.NewLine + @"Użytkownik " + @email + " jest zainteresowany Twoim ogłoszeniem: http://localhost:15054/Ad/Product/" + adId + Environment.NewLine
                     + Environment.NewLine + "Treść wiadomości od użytkownika: " + Environment.NewLine
-                    + Environment.NewLine  + @body+ Environment.NewLine
-                    + Environment.NewLine + "Pozdrawiamy serdecznie," + Environment.NewLine + "Zespół Hanger" ;
+                    + Environment.NewLine + @body + Environment.NewLine
+                    + Environment.NewLine + "Pozdrawiamy serdecznie," + Environment.NewLine + "Zespół Hanger";
                 msg.Priority = MailPriority.Normal;
 
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-               
+
 
                 //client.Credentials = new NetworkCredential("hanger.natalia@gmail.com", "hangertest");
                 client.Credentials = new NetworkCredential("tester.apo@gmail.com", "selenium");
@@ -720,8 +720,8 @@ namespace Hanger.Controllers
             {
                 int user = (Session["LogedUserID"] as User).Id;
                 var fav = (from s in DataContext.Favourite
-                          where (s.UserId == user) && (s.AdId == adId)
-                          select s).FirstOrDefault();
+                           where (s.UserId == user) && (s.AdId == adId)
+                           select s).FirstOrDefault();
 
                 DataContext.Favourite.Remove(fav);
 
@@ -752,84 +752,187 @@ namespace Hanger.Controllers
                         Exception raise = dbEx;
                     }
                 }
-                
-          
+
+
             }
 
             //return RedirectToAction("New", "Home");
             return RedirectToAction("Product", "Ad", new { id = adId });
         }
 
+       static  Dictionary<string, List<Recommendation>> productRecommendations = new Dictionary<string, List<Recommendation>>();
+
         public List<int> Recommendation(int Id) {
-
-
-            var adds = (from s in db.Ad
-                     
-                      select s.Id).Take(3);
-
-
 
             // sprawdzam czy ktos dodal ogloszenie do ulubionych
             var fav = from s in db.Favourite
-                        where (s.AdId == Id)
-                        select s;
-
+                      where (s.AdId == Id)
+                      select s;
+            // jesli nie ma ogloszenia w ulubionych, to losuje 3 ogloszenia
             if (fav.Count() == 0)
             {
                 Random rnd = new Random();
-            
+
                 List<int> randomList = new List<int>();
-                var ad = (from s in db.Ad                                  
-                                    select s).ToList();
+                var ad = (from s in db.Ad
+                          select s).ToList();
 
                 int a = rnd.Next(0, ad.Count());
-                randomList.Add(a);
+
                 for (int i = 0; i < 3; i++)
                 {
-                    while (randomList.Contains(a))
+                    while (randomList.Contains(a) || a == Id)
                     {
                         a = rnd.Next(0, ad.Count());
 
                     }
+                    randomList.Add(a);
                 }
 
-
+                return randomList;
             }
-            return adds.ToList();
-               
+            init(Id);
+
+            List<double> ranking;
+
+            return id.ToList();
+
 
         }
+        public void init(int id) {
+           
 
-        
-   /*         
+            List<Recommendation> list = new List<Recommendation>();
+            var fav = ( from s in db.Favourite                     
+                      select s.AdId).ToList();
 
-            var counter = advertisement.FirstOrDefault().Counter;
-            if (counter == null)
+           foreach( int item in fav)
             {
-                advertisement.FirstOrDefault().Counter = 1;
-            }
-            else
-            {
-                int counter1 = advertisement.FirstOrDefault().Counter.GetValueOrDefault();
-                counter1++;
-                advertisement.FirstOrDefault().Counter = counter1;
-            }
-            db.Entry(advertisement.FirstOrDefault()).State = EntityState.Modified;
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
-            {
-                Exception raise = dbEx;
+                var adInFav = (from s in db.Favourite
+                               where s.AdId==item
+                           select s).ToList();
+
+                foreach(var favorite in adInFav)
+                {
+                    list.Add(new Recommendation() { Name = favorite.UserId.ToString(), Rating = 1 });
+                }
+
+                productRecommendations.Add(id.ToString(), list);
             }
 
+          
+          }
 
-         
+        static IList<Recommendation> TopMatches(string name)
+        {
+            var users = ( from u in db.User
+                       select u ).Count();
+
+            // grab of list of products that *excludes* the item we're searching for
+            var sortedList = productRecommendations.Where(x => x.Key != name);
+
+            sortedList.OrderByDescending(x => x.Key);
+
+            List<Recommendation> recommendations = new List<Recommendation>();
+
+            // go through the list and calculate the Pearson score for each product
+            foreach (var entry in sortedList)
+            {
+                recommendations.Add(new Recommendation() { Name = entry.Key, Rating = CalculatePearsonCorrelation(name, entry.Key) });
+            }
+
+            return recommendations;
         }
-*/
+        static double CalculatePearsonCorrelation(string product1, string product2, int wszyscy)
+        {
+            List<Recommendation> shared_items = new List<Recommendation>();
 
-    }
+            int wspolne = 0;
 
-    }
+            // collect a list of products have have reviews in common
+            foreach (var item in productRecommendations[product1])
+            {
+                if (productRecommendations[product2].Where(x => x.Name == item.Name).Count() != 0)
+                {
+                    shared_items.Add(item);
+                    wspolne++;
+                }
+
+            }
+            int count1 = productRecommendations[product1].Count();
+            int niewspolne1 = productRecommendations[product1].Count() - wspolne;
+            int niewspolne2 = productRecommendations[product2].Count() - wspolne;
+            int niewspolneRazem = niewspolne1 + niewspolne2;
+            int reszta = wszyscy - wspolne - niewspolneRazem;
+            double sredniaWszystkie1 = 0f;
+            sredniaWszystkie1 = (double)count1 / wszyscy;
+            double sredniaWszystkie2 = (double)productRecommendations[product2].Count() / wszyscy;
+
+            double suma2 = wspolne * (1 - sredniaWszystkie1) * (1 - sredniaWszystkie2);
+            suma2 += niewspolne1 * ((1 - sredniaWszystkie1) * (-sredniaWszystkie2));
+            suma2 += niewspolne2 * ((-sredniaWszystkie1) * (1 - sredniaWszystkie2));
+            suma2 += reszta * (-sredniaWszystkie1) * (-sredniaWszystkie2);
+
+            double kw1 = productRecommendations[product1].Count() * Math.Pow((1 - sredniaWszystkie1), 2);
+            kw1 += (wszyscy - productRecommendations[product1].Count()) * Math.Pow((-sredniaWszystkie1), 2);
+            double kw2 = productRecommendations[product2].Count() * Math.Pow((1 - sredniaWszystkie2), 2);
+            kw2 += (wszyscy - productRecommendations[product2].Count()) * Math.Pow((-sredniaWszystkie2), 2);
+
+            double r2 = suma2 / (double)Math.Sqrt(kw1 * kw2);
+
+            double product1_review_sum = 0.00f;
+            foreach (Recommendation item in shared_items)
+            {
+                product1_review_sum += productRecommendations[product1].Where(x => x.Name == item.Name).FirstOrDefault().Rating;
+            }
+
+            double product2_review_sum = 0.00f;
+            foreach (Recommendation item in shared_items)
+            {
+                product2_review_sum += productRecommendations[product2].Where(x => x.Name == item.Name).FirstOrDefault().Rating;
+            }
+
+            double srednia1 = product1_review_sum / shared_items.Count;
+            double srednia2 = product2_review_sum / shared_items.Count;
+
+            // sum up the squares
+            double product1_rating = 0f;
+            double product2_rating = 0f;
+            double product1_srednia = 0f;
+            double product2_srednia = 0f;
+            double suma = 0f;
+
+            foreach (Recommendation item in shared_items)
+            {
+                product1_rating += Math.Pow(productRecommendations[product1].Where(x => x.Name == item.Name).FirstOrDefault().Rating, 2);
+                product1_srednia += Math.Pow(productRecommendations[product1].Where(x => x.Name == item.Name).FirstOrDefault().Rating - srednia1, 2);
+                product2_rating += Math.Pow(productRecommendations[product2].Where(x => x.Name == item.Name).FirstOrDefault().Rating, 2);
+                product2_srednia += Math.Pow(productRecommendations[product2].Where(x => x.Name == item.Name).FirstOrDefault().Rating - srednia2, 2);
+                suma += (productRecommendations[product1].Where(x => x.Name == item.Name).FirstOrDefault().Rating - srednia1) * (productRecommendations[product2].Where(x => x.Name == item.Name).FirstOrDefault().Rating - srednia2);
+            }
+
+            for (int i = 0; i < wszyscy; i++)
+            {
+
+            }
+
+            
+            double r = suma / (double)Math.Sqrt(product1_srednia * product2_srednia);
+            //return num / density;
+            //double inny = num / density;
+            return r;
+        }
+
+        public class Recommendation
+        {
+            public string Name { get; set; }
+            public double Rating { get; set; }
+        }
+    
+
+    
+
+}
+
+}
 
