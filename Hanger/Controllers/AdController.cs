@@ -88,7 +88,7 @@ namespace Hanger.Controllers
             {
                 Exception raise = dbEx;
             }
-
+            /*
             var adds = (from s in db.Ad
                         orderby s.Id
                         select s.Id);
@@ -97,6 +97,10 @@ namespace Hanger.Controllers
             list = adds.Take(3).ToList();
 
             //ViewData["Recommendation"] = Recommendation(Id);
+            ViewData["Recommendation"] = list;
+            */
+
+            List<int> list = ContentFiltering(Id);
             ViewData["Recommendation"] = list;
 
             return View(ad.ToList());
@@ -762,7 +766,7 @@ namespace Hanger.Controllers
 
        static  Dictionary<string, List<Recommendation>> productRecommendations = new Dictionary<string, List<Recommendation>>();
 
-        public List<int> Recommendation(int Id) {
+        public List<int> ContentFiltering(int Id) {
 
             // sprawdzam czy ktos dodal ogloszenie do ulubionych
             var fav = from s in db.Favourite
@@ -793,18 +797,27 @@ namespace Hanger.Controllers
             }
             init(Id);
 
-            List<double> ranking;
+            IList<Recommendation> rec = TopMatches(Id.ToString());
+            IList<Recommendation> SortedList = rec.OrderByDescending(o => o.Rating).ToList();
+            List<int> recommendation = new List<int>();
+            for (int i = 0; i < 3; i++)
+            {
 
-            return id.ToList();
+                String name = SortedList[i].Name;
+                int r = int.Parse(name);
+                recommendation.Add(r);
+            }
+
+            return recommendation;
 
 
         }
         public void init(int id) {
-           
 
+            productRecommendations = new Dictionary<string, List<Recommendation>>();
             List<Recommendation> list = new List<Recommendation>();
             var fav = ( from s in db.Favourite                     
-                      select s.AdId).ToList();
+                      select s.AdId).Distinct().ToList();
 
            foreach( int item in fav)
             {
@@ -817,13 +830,13 @@ namespace Hanger.Controllers
                     list.Add(new Recommendation() { Name = favorite.UserId.ToString(), Rating = 1 });
                 }
 
-                productRecommendations.Add(id.ToString(), list);
+                productRecommendations.Add(item.ToString(), list);
             }
 
-          
-          }
+           
+        }
 
-        static IList<Recommendation> TopMatches(string name)
+         IList<Recommendation> TopMatches(string name)
         {
             var users = ( from u in db.User
                        select u ).Count();
@@ -838,7 +851,7 @@ namespace Hanger.Controllers
             // go through the list and calculate the Pearson score for each product
             foreach (var entry in sortedList)
             {
-                recommendations.Add(new Recommendation() { Name = entry.Key, Rating = CalculatePearsonCorrelation(name, entry.Key) });
+                recommendations.Add(new Recommendation() { Name = entry.Key, Rating = CalculatePearsonCorrelation(name, entry.Key,users) });
             }
 
             return recommendations;
