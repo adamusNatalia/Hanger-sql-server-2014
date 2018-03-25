@@ -66,7 +66,14 @@ namespace Hanger.Controllers
                 {
                     ViewBag.isInFavourites = false;
                 }
+
+                var favorite = (from s in db.Favourite
+                           select s.AdId).Distinct().ToList();
+                List<int> fundList = favorite;
+                ViewBag.FavoriteID = fundList;
             }
+
+
 
             var counter = advertisement.FirstOrDefault().Counter;
             if (counter == null)
@@ -779,21 +786,22 @@ namespace Hanger.Controllers
 
                 List<int> randomList = new List<int>();
                 var ad = (from s in db.Ad
-                          select s).ToList();
+                          select s.Id).ToList();
 
                 int a = rnd.Next(0, ad.Count());
 
                 for (int i = 0; i < 3; i++)
                 {
-                    while (randomList.Contains(a) || a == Id)
+                    while (randomList.Contains(ad[a]) || ad[a] == Id)
                     {
                         a = rnd.Next(0, ad.Count());
 
                     }
-                    randomList.Add(a);
+                    randomList.Add(ad[a]);
                 }
 
-                return randomList;
+                //return randomList;
+                return new List<int>(new int[] { 112, 113, 114 });
             }
             init(Id);
 

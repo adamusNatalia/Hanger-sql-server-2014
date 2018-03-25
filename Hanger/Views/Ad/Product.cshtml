@@ -274,22 +274,33 @@
 
 
                         </a>
-                        @if ((@Html.DisplayFor(p => p.ElementAt(j).Brand.Name)).ToString() == "")
-                {
+                        @if ((@ad.BrandId) == null)
+                        {                        
                             <p class="alignright" style="width:100%">
 
                                 <b> @ad.Price zł</b>
                             </p>
-                            <p class="alignleft brand">
 
-                                <b>@ad.Size.Name</b>
-                            </p>
-                            if (Session["LogedUserID"] != null)
+                            if (Session["LogedUserID"] != null && ViewBag.FavoriteID.Contains(a))
                             {
-                                <p class="alignright">
-                                    <a href="@Url.Action("Product", "Ad", new { id =  Model.ElementAt(j).Id })" id="favourite">
-                                        <img alt="Favourite" src="~/Pictures/Icons/heart.png" class="favourite" />
-                                    </a>
+                                <p class="alignleft">
+                                    <img alt="Favourite" src="~/Pictures/Icons/favorite-heart.png" class="favourite" />
+
+
+                                </p>
+                                <p class="alignright brand">
+
+                                    <b>@ad.Size.Name</b>
+
+                                </p>
+                            }
+
+                            else
+                            {
+                                <p class="alignright brand" style="width:100%">
+
+                                    <b>@ad.Size.Name</b>
+
                                 </p>
                             }
 
@@ -304,16 +315,26 @@
 
                                 <b> @ad.Price zł</b>
                             </p>
-                            <p class="alignleft brand">
-
-                                <b>@ad.Size.Name</b>
-                            </p>
-                            if (Session["LogedUserID"] != null)
+                            if (Session["LogedUserID"] != null && ViewBag.FavoriteID.Contains(a))
                             {
-                                <p class="alignright">
-                                    <a href="@Url.Action("Product", "Ad", new { id =  Model.ElementAt(j).Id })" id="favourite">
-                                        <img alt="Favourite" src="~/Pictures/Icons/heart.png" class="favourite" />
-                                    </a>
+                                <p class="alignleft">
+                                    <img alt="Favourite" src="~/Pictures/Icons/favorite-heart.png" class="favourite" />
+
+
+                                </p>
+                                <p class="alignright brand">
+
+                                    <b>@ad.Size.Name</b>
+
+                                </p>
+                            }
+
+                            else
+                            {
+                                <p class="alignright brand" style="width:100%">
+
+                                    <b>@ad.Size.Name</b>
+
                                 </p>
                             }
                         }

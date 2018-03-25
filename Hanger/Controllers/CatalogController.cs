@@ -201,18 +201,6 @@ namespace Hanger.Controllers
                           where (d.Name == color)
                           select d.Id;
 
-            //var PriceFromLst = new List<string>();
-
-            //var PriceFromQry = from d in db.Ad
-            //               orderby d.Price
-            //               select d.Price;
-
-            //PriceFromLst.AddRange(PriceFromQry.Distinct());
-            //ViewBag.color = new SelectList(ColorLst);
-
-            //var IdColor = from d in db.Brand
-            //              where (d.Name == color)
-            //              select d.Id;
             List<SelectListItem> Price = new List<SelectListItem>();
             Price.Add(new SelectListItem() { Text = "10 zł", Value = "10" });
             Price.Add(new SelectListItem() { Text = "20 zł", Value = "20" });
