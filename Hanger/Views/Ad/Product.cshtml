@@ -13,7 +13,7 @@
     Random rnd = new Random();
 }
 
-
+@{ int j = ViewBag.index;}
 <style>
     nav {
     display:inline-block;
@@ -26,8 +26,25 @@
 
 </style>
 <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+@*
+    <script type="text/javascript">
 
-@{ int j = ViewBag.index;}
+
+        $.ajax({
+
+            url: @Url.Action("AddToFavourites", "Ad"),
+            type: 'POST',
+            data: '{adId :113}',
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+
+                    ViewBag.isInFavourites = true;
+
+                }
+            });
+    </script>
+*@
+
 <body>
     <div id="mainview">
        
@@ -177,10 +194,16 @@
                     if (Session["LogedUserID"] != null)
                     {
                         if (ViewBag.isInFavourites == false)
+
                         {
-                            using (Html.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+                            using (Ajax.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "processResult" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+
                             {
-                            @*@Html.Hidden("id", item.Id)*@
+                             @* using (Ajax.BeginForm("AddToFavourites", "Ad", new AjaxOptions { HttpMethod = "POST", OnSuccess = "processResult" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
+
+                             @*using (Html.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
+
+                             @*@Html.Hidden("id", item.Id) *@
                             <input type="submit" value="Dodaj do ulubionych" class="btn btn-default2" />
                             }
                         }
@@ -359,5 +382,20 @@
 <script src="~/js/contact.js"></script>
 
 <script src="~/js/switcher.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+        function OnSuccess(response) {
+            var message = "Person Id: "
+            message += "\nName: "
+            message += "\nGender: " 
+            message += "\nCity: "
+            alert(message);
+        }
+        function OnFailure(response) {
+            alert("Error occured.");
+        }
+</script>
 
 

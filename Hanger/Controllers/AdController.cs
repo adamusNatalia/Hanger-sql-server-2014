@@ -696,7 +696,7 @@ namespace Hanger.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddToFavourites(int adId)
+        public JsonResult AddToFavourites(int adId)
         {
 
             using (HangerDatabase db = new HangerDatabase())
@@ -718,10 +718,14 @@ namespace Hanger.Controllers
                 f.AdId = adId;
                 db.Favourite.Add(f);
                 db.SaveChanges();
+                //return Json(f, JsonRequestBehavior.AllowGet);
+
             }
 
             //return RedirectToAction("New", "Home");
-            return RedirectToAction("Product", "Ad", new { id = adId });
+            //return RedirectToAction("Product", "Ad", new { id = adId });
+             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            
         }
 
         [HttpPost]
@@ -800,8 +804,8 @@ namespace Hanger.Controllers
                     randomList.Add(ad[a]);
                 }
 
-                //return randomList;
-                return new List<int>(new int[] { 112, 113, 114 });
+                return randomList;
+                //return new List<int>(new int[] { 112, 113, 114 });
             }
             init(Id);
 
