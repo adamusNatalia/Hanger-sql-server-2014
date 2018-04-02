@@ -432,6 +432,8 @@
     <Content Include="Views\Register\NewProfil.cshtml" />
     <Content Include="Views\Register\EditProfil.cshtml" />
     <Content Include="Views\UserProfil\Favorites.cshtml" />
+    <Content Include="Views\Ad\AdToFavorites.cshtml" />
+    <Content Include="Views\Ad\RemoveFromFavorites.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

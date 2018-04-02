@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Hanger.Models.Ad>
+
+@{
+    ViewBag.Title = "Product";
+}
+@Styles.Render("~/css/style.css")
+
+@Styles.Render("~/css/contact.css")
+
+@Styles.Render("~/css/new.css")
+
+@{
+    Random rnd = new Random();
+}
+
+@{ int j = ViewBag.index;}
+<style>
+    nav {
+        display: inline-block;
+        width: 150px;
+        vertical-align: middle;
+    }
+
+    a {
+        display: block;
+    }
+</style>
+<script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+
+
+@if (ViewBag.isInFavourites == false)
+
+{
+    using (Ajax.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "favorites" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+
+    {
+        @* using (Ajax.BeginForm("AddToFavourites", "Ad", new AjaxOptions { HttpMethod = "POST", OnSuccess = "processResult" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
+
+        @*using (Html.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
+
+        @*@Html.Hidden("id", item.Id) *@
+        <input type="submit" value="Dodaj do ulubionychch" class="btn btn-default2" />
+    }
+}
+else
+{
+    using (Ajax.BeginForm("RemoveFromFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "favorites" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+    {
+        @*using (Html.BeginForm("RemoveFromFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+        *@
+        @*@Html.Hidden("id", item.Id)*@
+        <input type="submit" value="Usuń z ulubionychfdbh" class="btn btn-default2" />
+    }
+}

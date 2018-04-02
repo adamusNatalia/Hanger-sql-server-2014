@@ -694,7 +694,7 @@ namespace Hanger.Controllers
             }
             return RedirectToAction("Product", "Ad", new { Id = id });
         }
-
+        /*
         [HttpPost]
         public JsonResult AddToFavourites(int adId)
         {
@@ -718,6 +718,7 @@ namespace Hanger.Controllers
                 f.AdId = adId;
                 db.Favourite.Add(f);
                 db.SaveChanges();
+                ViewBag.isInFavourites = true;
                 //return Json(f, JsonRequestBehavior.AllowGet);
 
             }
@@ -726,6 +727,44 @@ namespace Hanger.Controllers
             //return RedirectToAction("Product", "Ad", new { id = adId });
              return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             
+        }
+        */
+
+        [HttpPost]
+        public ActionResult AddToFavourites(int adId)
+        {
+
+            using (HangerDatabase db = new HangerDatabase())
+            {
+                Favourite f = new Favourite();
+                f.Date_start = DateTime.Now;
+                f.UserId = (Session["LogedUserID"] as User).Id;
+
+
+                if (db.Favourite != null && db.Favourite.Count() != 0)
+                {
+                    f.Id = (from ph in db.Favourite
+                            select ph.Id).Max() + 1;
+                }
+                else
+                    f.Id = 0;
+
+                // p.OwnerId = (Session["CurrentUserEmail"] as User).UserId;
+                f.AdId = adId;
+                db.Favourite.Add(f);
+                db.SaveChanges();
+                ViewBag.isInFavourites = true;
+                //return Json(f, JsonRequestBehavior.AllowGet);
+
+            }
+
+            //return RedirectToAction("New", "Home");
+            //return RedirectToAction("Product", "Ad", new { id = adId });
+            var ad = from s in db.Ad
+                     select s;
+            ViewBag.index = ad.ToList().FindIndex(a => a.Id == adId);
+            return PartialView("AdToFavorites", ad.ToList());
+
         }
 
         [HttpPost]
@@ -741,9 +780,18 @@ namespace Hanger.Controllers
                 DataContext.Favourite.Remove(fav);
 
                 DataContext.SaveChanges();
+                ViewBag.isInFavourites = false;
             }
+            var ad = from s in db.Ad
+                     select s;
+            //ViewBag.AddCount = ad.Count();
 
-            return RedirectToAction("Product", "Ad", new { id = adId });
+
+            ViewBag.index = ad.ToList().FindIndex(a => a.Id == adId);
+            ViewBag.ad = adId;
+            Ad advertisement = db.Ad.Find(adId);
+
+            return PartialView("AdToFavorites", ad.ToList());
         }
 
         [HttpPost]

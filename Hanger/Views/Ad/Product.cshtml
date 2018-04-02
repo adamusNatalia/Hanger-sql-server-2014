@@ -94,129 +94,112 @@
             </div>
             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-4">
 
-                <div style="text-align:right; font-size:11px">
-                    Data dodania: @ViewBag.date
-                </div>
+    <div style="text-align:right; font-size:11px">
+        Data dodania: @ViewBag.date
+    </div>
 
 
-                <h1>@Html.DisplayFor(model => model.ElementAt(j).Title)</h1>
-                <strong id="price">@Html.DisplayFor(model => model.ElementAt(j).Price) zł</strong>
-                <p>@Html.DisplayFor(model => model.ElementAt(j).Description) </p>
-                <div>
-                    @if ((@Html.DisplayFor(model => model.ElementAt(j).Brand.Name)).ToString() != "")
-                    {
-                        <div class="details-list__item-title">
-                            <strong id="info"><span class="title">Marka  </span></strong>
-                        </div>
+    <h1>@Html.DisplayFor(model => model.ElementAt(j).Title)</h1>
+    <strong id="price">@Html.DisplayFor(model => model.ElementAt(j).Price) zł</strong>
+    <p>@Html.DisplayFor(model => model.ElementAt(j).Description) </p>
+    <div>
+        @if ((@Html.DisplayFor(model => model.ElementAt(j).Brand.Name)).ToString() != "")
+        {
+            <div class="details-list__item-title">
+                <strong id="info"><span class="title">Marka  </span></strong>
+            </div>
 
                         <div class="details-list__item-value">
                             <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Brand.Name)</span></strong>
                         </div>
-                    }
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Rozmiar  </span></strong>
-                    </div>
+        }
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Rozmiar  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
-                        <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Size.Name)</span></strong>
-                    </div>
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Stan  </span></strong>
-                    </div>
+        <div class="details-list__item-value">
+            <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Size.Name)</span></strong>
+        </div>
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Stan  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
-                        <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Condition.Name)</span></strong>
-                    </div>
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Kolor  </span></strong>
-                    </div>
+        <div class="details-list__item-value">
+            <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Condition.Name)</span></strong>
+        </div>
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Kolor  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
-                        <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Color.Name)</span></strong>
-                    </div>
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Kategoria  </span></strong>
-                    </div>
+        <div class="details-list__item-value">
+            <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Color.Name)</span></strong>
+        </div>
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Kategoria  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
-                        <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Subcategory.Name)</span></strong>
-                    </div>
+        <div class="details-list__item-value">
+            <strong id="info"><span class="color">@Html.DisplayFor(model => model.ElementAt(j).Subcategory.Name)</span></strong>
+        </div>
 
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Możliwość wymiany  </span></strong>
-                    </div>
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Możliwość wymiany  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
+        <div class="details-list__item-value">
 
-                        @if (Model.ElementAt(j).Swap == true)
-                        {
-                            <strong id="info"><span class="color">Tak</span></strong>
-                        }
-                        else
-                        {
-                            <strong id="info"><span class="color">Brak możliwości</span></strong>
-                        }
+            @if (Model.ElementAt(j).Swap == true)
+            {
+                <strong id="info"><span class="color">Tak</span></strong>
+            }
+            else
+            {
+                <strong id="info"><span class="color">Brak możliwości</span></strong>
+            }
 
-                    </div>
-                    <div class="details-list__item-title">
-                        <strong id="info"><span class="title">Użytkownik  </span></strong>
-                    </div>
+        </div>
+        <div class="details-list__item-title">
+            <strong id="info"><span class="title">Użytkownik  </span></strong>
+        </div>
 
-                    <div class="details-list__item-value">
-                        @*<strong id="info"><span class="color">@Html.DisplayFor(model => model.User.Profil_name)</span></strong>*@
-                        <a href="@Url.Action("UserCatalog", "UserProfil", new { Id = Model.ElementAt(j).UserId })"><strong id="info"><span class="color" style="color: #dc679a; font-weight: bold;">@Html.DisplayFor(model => model.ElementAt(j).User.Profil_name)</span></strong></a>
-                    </div>
+        <div class="details-list__item-value">
+            @*<strong id="info"><span class="color">@Html.DisplayFor(model => model.User.Profil_name)</span></strong>*@
+            <a href="@Url.Action("UserCatalog", "UserProfil", new { Id = Model.ElementAt(j).UserId })"><strong id="info"><span class="color" style="color: #dc679a; font-weight: bold;">@Html.DisplayFor(model => model.ElementAt(j).User.Profil_name)</span></strong></a>
+        </div>
 
 
 
+
+    </div>
+
+
+    @if (Session["LogedUserID"] != null && (Session["LogedUserID"] as Hanger.Models.User).Id == Model.ElementAt(j).UserId)
+    {
+        <a href="@Url.Action("Edit", "Ad", new { id = Model.ElementAt(j).Id })" class="btn btn-default2" style="margin-top: 10px;">Edycja ogłoszenia</a>
+
+        using (Html.BeginForm("IsSold", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+        {
+            @*@Html.Hidden("id", item.Id)*@
+            <input type="submit" value="Oznacz jako sprzedane" class="btn btn-default" />
+        }
+
+        using (Html.BeginForm("Delete", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
+        {
+            @*@Html.Hidden("id", item.Id)*@
+            <input type="submit" value="Usuń ogłoszenie" class="btn btn-default" />
+        }
+    }
+    else
+    {
+        if (Session["LogedUserID"] != null)
+        {
+            <div id="favorites">
+                <div id="pomocy">
+                    @{ Html.RenderPartial("AdToFavorites");}
 
                 </div>
-
-
-                @if (Session["LogedUserID"] != null && (Session["LogedUserID"] as Hanger.Models.User).Id == Model.ElementAt(j).UserId)
-                {
-                    <a href="@Url.Action("Edit", "Ad", new { id = Model.ElementAt(j).Id })" class="btn btn-default2" style="margin-top: 10px;">Edycja ogłoszenia</a>
-
-                    using (Html.BeginForm("IsSold", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
-                    {
-                        @*@Html.Hidden("id", item.Id)*@
-                        <input type="submit" value="Oznacz jako sprzedane" class="btn btn-default" />
-                    }
-
-                    using (Html.BeginForm("Delete", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
-                    {
-                        @*@Html.Hidden("id", item.Id)*@
-                        <input type="submit" value="Usuń ogłoszenie" class="btn btn-default" />
-                    }
-                }
-                else
-                {
-                    if (Session["LogedUserID"] != null)
-                    {
-                        if (ViewBag.isInFavourites == false)
-
-                        {
-                            using (Ajax.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "processResult" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
-
-                            {
-                             @* using (Ajax.BeginForm("AddToFavourites", "Ad", new AjaxOptions { HttpMethod = "POST", OnSuccess = "processResult" }, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
-
-                             @*using (Html.BeginForm("AddToFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))*@
-
-                             @*@Html.Hidden("id", item.Id) *@
-                            <input type="submit" value="Dodaj do ulubionych" class="btn btn-default2" />
-                            }
+            </div>
                         }
-                        else
-                        {
-                            using (Html.BeginForm("RemoveFromFavourites", "Ad", new { adId = Model.ElementAt(j).Id }, FormMethod.Post, new { style = "border:0px; padding:0px; margin-top: 10px;" }))
-                            {
-                                @*@Html.Hidden("id", item.Id)*@
-                                <input type="submit" value="Usuń z ulubionych" class="btn btn-default2" />
-                            }
-                        }
-
-                    }
 
                     <button id="popup" onclick="div_show()" class="btn btn-default" style="margin-top: 10px; margin-bottom: 30px;">Wyślij wiadomość</button>
                 }
@@ -384,6 +367,7 @@
 <script src="~/js/switcher.js"></script>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 
 <script type="text/javascript">
         function OnSuccess(response) {
