@@ -824,6 +824,10 @@ namespace Hanger.Controllers
         }
 
        static  Dictionary<string, List<Recommendation>> productRecommendations = new Dictionary<string, List<Recommendation>>();
+       static List<int> brand = new List<int>();
+       static List<int> size = new List<int>();
+       static List<int> subcategory = new List<int>();
+       static List<int> color = new List<int>();
 
         public List<int> ContentFiltering(int Id) {
 
@@ -876,9 +880,12 @@ namespace Hanger.Controllers
 
             productRecommendations = new Dictionary<string, List<Recommendation>>();
             List<Recommendation> list = new List<Recommendation>();
+
+            // wyrozniam tylko ogloszenia pojawiajace sie w ulubionych
             var fav = ( from s in db.Favourite                     
                       select s.AdId).Distinct().ToList();
 
+            // dla kazdego ogloszenia w ulubionych zbieram dane o uzytkownikach, ktorzy dodali ogloszenie do ulubionych
            foreach( int item in fav)
             {
                 var adInFav = (from s in db.Favourite
@@ -896,12 +903,74 @@ namespace Hanger.Controllers
            
         }
 
-         IList<Recommendation> TopMatches(string name)
+        public void initBayesian()
         {
+            //productRecommendations = new Dictionary<string, List<int>>();
+       
+
+            if (Session["LogedUserID"] != null)
+            {
+                int user = (Session["LogedUserID"] as User).Id;
+                var fav = (from s in db.Favourite
+                          where (s.UserId == user)
+                          select s.AdId).ToList();
+
+                foreach (int item in fav)
+                {
+                    var adInFav = (from s in db.Ad
+                                   where s.Id == item
+                                   select s).FirstOrDefault();
+                    brand.Add(adInFav.BrandId.GetValueOrDefault());
+                    size.Add(adInFav.SizeId);
+                    subcategory.Add(adInFav.SubcategoryId);
+                    color.Add(adInFav.ColorId);
+
+                }
+            }
+        }
+
+        IList<Recommendation> bayesianRecommentadion(string name)
+        {
+           
+            var ad = (from a in db.Ad
+                         select a).ToList();
+           
+
+            List<Recommendation> recommendations = new List<Recommendation>();
+            foreach (var item in ad)
+            {
+                recommendations.Add(new Recommendation() { Name = (item.Id).ToString(), Rating = CalculateBayesian(item.BrandId.GetValueOrDefault(), item.ColorId,item.SubcategoryId,item.SizeId, ad.Count()) });
+            }
+
+            return recommendations;
+        }
+
+
+        static int CountOccurenceOfValue2(List<int> list, int valueToFind)
+        {
+            int count = list.Where(temp => temp.Equals(valueToFind))
+                        .Select(temp => temp)
+                        .Count();
+            return count;
+        }
+
+        static double CalculateBayesian(int brandId, int colorId, int subcategoryId, int sizeId, int wszyscy)
+        {
+            int userBrand = CountOccurenceOfValue2(brand, brandId);
+            int userSize = CountOccurenceOfValue2(size, sizeId);
+            int userSubcategory = CountOccurenceOfValue2(subcategory, subcategoryId);
+            int userColor = CountOccurenceOfValue2(color, colorId);
+            double count = (userBrand + userSize + userSubcategory + userColor) / (4 * wszyscy) ;
+            return count;
+        }
+
+            IList<Recommendation> TopMatches(string name)
+        {
+            // wszyscy uzytkownicy w bazie
             var users = ( from u in db.User
                        select u ).Count();
 
-            // grab of list of products that *excludes* the item we're searching for
+            // listy dla wszystkich przedmiotow, ktore zostaly dodane do ulubionych (oprocz tego, ktorego porownujemy)
             var sortedList = productRecommendations.Where(x => x.Key != name);
 
             sortedList.OrderByDescending(x => x.Key);
