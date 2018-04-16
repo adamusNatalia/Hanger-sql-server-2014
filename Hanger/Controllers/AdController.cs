@@ -107,7 +107,8 @@ namespace Hanger.Controllers
             ViewData["Recommendation"] = list;
             */
 
-            List<int> list = ContentFiltering(Id);
+            //List<int> list = ContentFiltering(Id);
+            List<int> list = bayesianRecomendationAlgorithm(Id);
             ViewData["Recommendation"] = list;
 
             return View(ad.ToList());
@@ -876,6 +877,67 @@ namespace Hanger.Controllers
 
 
         }
+
+        public List<int> randomList(int Id)
+        {
+            Random rnd = new Random();
+
+            List<int> randomList = new List<int>();
+            var ad = (from s in db.Ad
+                      select s.Id).ToList();
+
+            int a = rnd.Next(0, ad.Count());
+
+            for (int i = 0; i< 3; i++)
+            {
+                while (randomList.Contains(ad[a]) || ad[a] == Id)
+                {
+                    a = rnd.Next(0, ad.Count());
+
+                }
+              randomList.Add(ad[a]);
+                }
+
+                return randomList;
+        }
+
+        public List<int> bayesianRecomendationAlgorithm(int Id)
+        {
+            
+            if (Session["LogedUserID"] != null) { 
+                // sprawdzam czy ktos dodal ogloszenie do ulubionych
+                var fav = from s in db.Favourite
+                      where (s.AdId == Id)
+                      select s;
+
+                // jesli nie ma ogloszenia w ulubionych, to losuje 3 ogloszenia
+                if (fav.Count() == 0)
+                {
+                    randomList(Id);
+                    //return new List<int>(new int[] { 112, 113, 114 });
+                }
+            }
+            else
+            {
+                randomList(Id);
+            }
+            initBayesian();
+
+            IList<Recommendation> rec = bayesianRecommentadion();
+            IList<Recommendation> SortedList = rec.OrderByDescending(o => o.Rating).ToList();
+            List<int> recommendation = new List<int>();
+            for (int i = 0; i < 3; i++)
+            {
+
+                String name = SortedList[i].Name;
+                int r = int.Parse(name);
+                recommendation.Add(r);
+            }
+
+            return recommendation;
+
+
+        }
         public void init(int id) {
 
             productRecommendations = new Dictionary<string, List<Recommendation>>();
@@ -929,7 +991,7 @@ namespace Hanger.Controllers
             }
         }
 
-        IList<Recommendation> bayesianRecommentadion(string name)
+        IList<Recommendation> bayesianRecommentadion()
         {
            
             var ad = (from a in db.Ad
@@ -961,7 +1023,9 @@ namespace Hanger.Controllers
             int userSubcategory = CountOccurenceOfValue2(subcategory, subcategoryId);
             int userColor = CountOccurenceOfValue2(color, colorId);
             double count = (userBrand + userSize + userSubcategory + userColor) / (4 * wszyscy) ;
-            return count;
+            double sum = (userBrand + userSize + userSubcategory + userColor);
+            double podziel = sum / wszyscy;
+            return podziel;
         }
 
             IList<Recommendation> TopMatches(string name)
