@@ -829,6 +829,10 @@ namespace Hanger.Controllers
        static List<int> size = new List<int>();
        static List<int> subcategory = new List<int>();
        static List<int> color = new List<int>();
+       static List<int> brandInAllAd = new List<int>();
+       static List<int> sizeInAllAd = new List<int>();
+       static List<int> subcategoryInAllAd = new List<int>();
+       static List<int> colorInAllAd = new List<int>();
 
         public List<int> ContentFiltering(int Id) {
 
@@ -996,6 +1000,13 @@ namespace Hanger.Controllers
            
             var ad = (from a in db.Ad
                          select a).ToList();
+            foreach (Ad advertisment in ad)
+            {
+                brandInAllAd.Add(advertisment.BrandId.GetValueOrDefault());
+                sizeInAllAd.Add(advertisment.SizeId);
+                subcategoryInAllAd.Add(advertisment.SubcategoryId);
+                colorInAllAd.Add(advertisment.ColorId);
+            }
            
 
             List<Recommendation> recommendations = new List<Recommendation>();
@@ -1022,9 +1033,17 @@ namespace Hanger.Controllers
             int userSize = CountOccurenceOfValue2(size, sizeId);
             int userSubcategory = CountOccurenceOfValue2(subcategory, subcategoryId);
             int userColor = CountOccurenceOfValue2(color, colorId);
+
+            int allAdsBrand = CountOccurenceOfValue2(brandInAllAd, brandId);
+            int allAdsSize = CountOccurenceOfValue2(sizeInAllAd, sizeId);
+            int allAdsSubcategory = CountOccurenceOfValue2(subcategoryInAllAd, subcategoryId);
+            int allAdsrColor = CountOccurenceOfValue2(colorInAllAd, colorId);
+            double pFav = size.Count() / wszyscy;
             double count = (userBrand + userSize + userSubcategory + userColor) / (4 * wszyscy) ;
-            double sum = (userBrand + userSize + userSubcategory + userColor);
-            double podziel = sum / wszyscy;
+            double ppFav = (userBrand * userSize *userSubcategory * userColor*pFav);
+            double ppNFav = allAdsBrand * allAdsSize * allAdsSubcategory * allAdsrColor;
+            
+            double podziel = (ppFav) /(ppFav+ ppNFav);
             return podziel;
         }
 
