@@ -48,7 +48,7 @@
 <body>
     <div id="mainview">
        
-            <div id="nav" class="col-lg-2 col-md-2 col-sm-2">
+            <div id="nav-product" class="col-lg-2 col-md-2 col-sm-2">
                 <nav>
                     @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
                     {
@@ -67,7 +67,7 @@
                 </nav>
             </div>
 
-            <div id="photoDiv"class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-4">
+            <div id="photoDiv"class="col-lg-5 col-md-5 col-sm-6 col-xs-12 mb-4">
 
                 @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
                 {
@@ -92,7 +92,7 @@
                     }
                 }
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-4">
+            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12 mb-4">
 
     <div style="text-align:right; font-size:11px">
         Data dodania: @ViewBag.date
@@ -267,7 +267,7 @@
                                 if (item.AdId ==a && item.Main_photo == true && isPhoto == false)
                                 {
 
-                                    <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" style="height: 340px;" /><br />
+                                    <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))"  id="rec"; /><br />
                                     isPhoto = true;
                                 }
 
