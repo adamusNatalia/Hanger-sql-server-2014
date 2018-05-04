@@ -328,7 +328,6 @@
     <Content Include="css\style.css" />
     <Content Include="css\tiles.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="js\switcher.js" />
     <Content Include="js\account.js" />
@@ -401,9 +400,11 @@
     </Content>
     <None Include="Properties\PublishProfiles\hanger - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\hanger - FTP %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\hanger - FTP %284%29.pubxml" />
     <None Include="Properties\PublishProfiles\hanger - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\hanger - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\hanger - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\hanger - Web Deploy %284%29.pubxml" />
     <None Include="Properties\PublishProfiles\hanger - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\hanger-mgr3 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\hanger-mgr3 - Web Deploy.pubxml" />
@@ -481,13 +482,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Login\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +489,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="fonts\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

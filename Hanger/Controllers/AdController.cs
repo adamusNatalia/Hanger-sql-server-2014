@@ -840,7 +840,7 @@ namespace Hanger.Controllers
             var fav = from s in db.Favourite
                       where (s.AdId == Id)
                       select s;
-            // jesli nie ma ogloszenia w ulubionych, to losuje 3 ogloszenia
+            // jesli nie ma ogloszenia w dbo.Favourites, to losuje 3 ogloszenia
             if (fav.Count() == 0)
             {
                 Random rnd = new Random();
@@ -907,39 +907,45 @@ namespace Hanger.Controllers
 
         public List<int> bayesianRecomendationAlgorithm(int Id)
         {
-            
-            if (Session["LogedUserID"] != null) { 
-                // sprawdzam czy ktos dodal ogloszenie do ulubionych
-                var fav = from s in db.Favourite
-                      where (s.AdId == Id)
-                      select s;
+            int userId = 20;
 
-                // jesli nie ma ogloszenia w ulubionych, to losuje 3 ogloszenia
-                if (fav.Count() == 0)
+            if (Session["LogedUserID"] != null) {
+                // sprawdzam czy uzytkownik ma dodane ogloszenia do ulubionych
+                userId = (Session["LogedUserID"] as User).Id;
+
+                var fav = from s in db.Favourite
+                          where (s.UserId == userId)
+                          select s;
+                
+
+                // jesli liczba ogloszen w ulubionych jest mniejsza niz 3 to wykonuje poprzedni algorytm
+                if (fav.Count() < 3)
                 {
-                    randomList(Id);
+                    return randomList(Id);
                     //return new List<int>(new int[] { 112, 113, 114 });
                 }
+
+                initBayesian(userId);
+
+                IList<Recommendation> rec = bayesianRecommentadion(userId);
+                IList<Recommendation> sortedBayesianList = rec.OrderByDescending(o => o.Rating).ToList();
+                List<int> recommendation = new List<int>();
+                if (sortedBayesianList[2].Rating > 0)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+
+                        String name = sortedBayesianList[i].Name;
+                        int r = int.Parse(name);
+                        recommendation.Add(r);
+                    }
+                    return recommendation;
+                }
             }
-            else
-            {
-                randomList(Id);
-            }
-            initBayesian();
-
-            IList<Recommendation> rec = bayesianRecommentadion();
-            IList<Recommendation> SortedList = rec.OrderByDescending(o => o.Rating).ToList();
-            List<int> recommendation = new List<int>();
-            for (int i = 0; i < 3; i++)
-            {
-
-                String name = SortedList[i].Name;
-                int r = int.Parse(name);
-                recommendation.Add(r);
-            }
-
-            return recommendation;
-
+        
+           
+             return randomList(Id);
+     
 
         }
         public void init(int id) {
@@ -956,92 +962,106 @@ namespace Hanger.Controllers
             {
                 var adInFav = (from s in db.Favourite
                                where s.AdId==item
-                           select s).ToList();
+                           select s.UserId).ToList();
+                //lista osób, które dodaly ogloszenie do ulubionych
 
-                foreach(var favorite in adInFav)
+                foreach(int favorite in adInFav)
                 {
-                    list.Add(new Recommendation() { Name = favorite.UserId.ToString(), Rating = 1 });
+                    list.Add(new Recommendation() { Name = favorite.ToString(), Rating = 1 });
                 }
-
+                // (Id ogłoszenia, lista userow)
                 productRecommendations.Add(item.ToString(), list);
             }
 
            
         }
 
-        public void initBayesian()
+        public void initBayesian(int user)
         {
             //productRecommendations = new Dictionary<string, List<int>>();
-       
+            // lista ogloszen dodane przez uzytkownika do ulubionych
+            var fav = (from s in db.Favourite
+                        where (s.UserId == user)
+                        select s.AdId).ToList();
 
-            if (Session["LogedUserID"] != null)
+            foreach (int item in fav)
             {
-                int user = (Session["LogedUserID"] as User).Id;
-                var fav = (from s in db.Favourite
-                          where (s.UserId == user)
-                          select s.AdId).ToList();
+                var adInFav = (from s in db.Ad
+                                where s.Id == item
+                                select s).FirstOrDefault();
+                brand.Add(adInFav.BrandId.GetValueOrDefault());
+                size.Add(adInFav.SizeId);
+                subcategory.Add(adInFav.SubcategoryId);
+                color.Add(adInFav.ColorId);
 
-                foreach (int item in fav)
-                {
-                    var adInFav = (from s in db.Ad
-                                   where s.Id == item
-                                   select s).FirstOrDefault();
-                    brand.Add(adInFav.BrandId.GetValueOrDefault());
-                    size.Add(adInFav.SizeId);
-                    subcategory.Add(adInFav.SubcategoryId);
-                    color.Add(adInFav.ColorId);
-
-                }
             }
+            
         }
 
-        IList<Recommendation> bayesianRecommentadion()
+        IList<Recommendation> bayesianRecommentadion(int userId)
         {
-           
-            var ad = (from a in db.Ad
-                         select a).ToList();
-            foreach (Ad advertisment in ad)
+
+            var withoutUserAds = (from a in db.Ad
+                           where a.UserId != userId
+                           select a).ToList();
+
+            // lista wszystkich marek wystepujacych w ogloszeniach
+            foreach (Ad advertisment in withoutUserAds)
             {
                 brandInAllAd.Add(advertisment.BrandId.GetValueOrDefault());
                 sizeInAllAd.Add(advertisment.SizeId);
                 subcategoryInAllAd.Add(advertisment.SubcategoryId);
                 colorInAllAd.Add(advertisment.ColorId);
             }
+
+
+            var inFav = (from a in db.Favourite
+                         where a.UserId == userId
+                         select a.AdId).ToList();
+            
+              
            
-
+            // dla kazdeo ogloszenia obliczam prawdopodobienstwo
             List<Recommendation> recommendations = new List<Recommendation>();
-            foreach (var item in ad)
+            foreach (var item in withoutUserAds)
             {
-                recommendations.Add(new Recommendation() { Name = (item.Id).ToString(), Rating = CalculateBayesian(item.BrandId.GetValueOrDefault(), item.ColorId,item.SubcategoryId,item.SizeId, ad.Count()) });
-            }
+                if (!inFav.Contains(item.Id))
+                {
+           
+                    recommendations.Add(new Recommendation() { Name = (item.Id).ToString(), Rating = CalculateBayesian(item.BrandId.GetValueOrDefault(), item.ColorId, item.SubcategoryId, item.SizeId, withoutUserAds.Count()) });
 
+                }
+            }
             return recommendations;
         }
 
-
-        static int CountOccurenceOfValue2(List<int> list, int valueToFind)
+        // wyliczam liczbe wystapien danej wartosci 
+        static double CountOccurenceOfValue2(List<int> list, int valueToFind)
         {
             int count = list.Where(temp => temp.Equals(valueToFind))
                         .Select(temp => temp)
                         .Count();
-            return count;
+            double count2 = (double)count;
+            return count2;
         }
 
         static double CalculateBayesian(int brandId, int colorId, int subcategoryId, int sizeId, int wszyscy)
         {
-            int userBrand = CountOccurenceOfValue2(brand, brandId);
-            int userSize = CountOccurenceOfValue2(size, sizeId);
-            int userSubcategory = CountOccurenceOfValue2(subcategory, subcategoryId);
-            int userColor = CountOccurenceOfValue2(color, colorId);
+            double userBrand = CountOccurenceOfValue2(brand, brandId);
+            double userSize = CountOccurenceOfValue2(size, sizeId);
+            double userSubcategory = CountOccurenceOfValue2(subcategory, subcategoryId);
+            double userColor = CountOccurenceOfValue2(color, colorId);
 
-            int allAdsBrand = CountOccurenceOfValue2(brandInAllAd, brandId);
-            int allAdsSize = CountOccurenceOfValue2(sizeInAllAd, sizeId);
-            int allAdsSubcategory = CountOccurenceOfValue2(subcategoryInAllAd, subcategoryId);
-            int allAdsrColor = CountOccurenceOfValue2(colorInAllAd, colorId);
-            double pFav = size.Count() / wszyscy;
-            double count = (userBrand + userSize + userSubcategory + userColor) / (4 * wszyscy) ;
-            double ppFav = (userBrand * userSize *userSubcategory * userColor*pFav);
-            double ppNFav = allAdsBrand * allAdsSize * allAdsSubcategory * allAdsrColor;
+            double allAdsBrand = CountOccurenceOfValue2(brandInAllAd, brandId);
+            double allAdsSize = CountOccurenceOfValue2(sizeInAllAd, sizeId);
+            double allAdsSubcategory = CountOccurenceOfValue2(subcategoryInAllAd, subcategoryId);
+            double allAdsrColor = CountOccurenceOfValue2(colorInAllAd, colorId);
+            double inFav = (double)size.Count();
+            double pFav = inFav / (double)wszyscy;
+            //double count = (userBrand + userSize + userSubcategory + userColor) / (4 * wszyscy) ;
+            double ppFav = (userBrand /inFav * userSize / inFav * userSubcategory / inFav * userColor / inFav * pFav);
+            double notInFav = (double)wszyscy - inFav;
+            double ppNFav = allAdsBrand/ notInFav * allAdsSize/ notInFav * allAdsSubcategory/ notInFav * allAdsrColor/ notInFav;
             
             double podziel = (ppFav) /(ppFav+ ppNFav);
             return podziel;
