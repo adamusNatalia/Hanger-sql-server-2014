@@ -44,15 +44,23 @@
             });
     </script>
 *@
-
+@{ int b = Model.ElementAt(j).Id;}
 <body>
     <div id="mainview">
        
             <div id="nav-product" class="col-lg-2 col-md-2 col-sm-2">
                 <nav>
+                    @foreach (var item in new Hanger.Models.HangerDatabase().Photos.Where(i => i.AdId==b).Select(i => i))
+                    {
+                        <a href="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))">
+
+                            <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" width="120" />
+                        </a>
+                    }
+@*
                     @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
                     {
-                        @*@if (item.AdId == Model.Id)*@
+                       
                     if (item.AdId == Model.ElementAt(j).Id)
                     {
                         <a href="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))">
@@ -63,14 +71,24 @@
                         }
 
                     }
+    *@
 
                 </nav>
             </div>
 
             <div id="photoDiv"class="col-lg-5 col-md-5 col-sm-6 col-xs-12 mb-4">
+    
+                @foreach (var item in new Hanger.Models.HangerDatabase().Photos.Where(i => i.AdId ==b && i.Main_photo == true).Select(i => i))
 
-                @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
                 {
+                    <img id="main" class="center-block" src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" height="500" style="max-width:400px" /><br />
+
+                }
+@*
+                @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
+    
+                {
+
                     if (item.AdId == Model.ElementAt(j).Id && item.Main_photo == true)
                     {
 
@@ -79,6 +97,7 @@
                     }
 
                 }
+    *@
                 @if (Session["LogedUserID"] != null && (Session["LogedUserID"] as Hanger.Models.User).Id != Model.ElementAt(j).UserId)
                 {
                     if (ViewBag.isInFavourites == false)
@@ -262,6 +281,7 @@
                     <div class="pin">
                         <a href="@Url.Action("Product", "Ad", new { id = a })" class="navbar-left">
                             @{Boolean isPhoto = false; }
+                            @*
                             @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
                             {
                                 if (item.AdId ==a && item.Main_photo == true && isPhoto == false)
@@ -272,7 +292,15 @@
                                 }
 
                             }
-
+                                *@
+                            @foreach (var item in new Hanger.Models.HangerDatabase().Photos.Where(i => i.AdId == a && i.Main_photo == true).Select(i => i))
+                            {
+                                if (isPhoto == false)
+                                {
+                                    <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" id="rec" ; /><br />
+                                    isPhoto = true;
+                                }
+                            }
                             @if (isPhoto == false)
                             {
                                 <img src="~/Pictures/dress.jpg" /><br />
