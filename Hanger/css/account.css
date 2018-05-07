@@ -63,14 +63,15 @@ textarea{
     padding: 8px 18px;
 }
 
+/*
 .icon {
 background-image: url(../../Pictures/Login/icon2.png);
 background-position: left center;
 background-repeat: no-repeat;
 
-padding-left: 16px; /* Or size of icon + spacing */
+padding-left: 16px; 
 }
-
+*/
 .lead-center {
     margin-bottom: 21px;
     font-size: 20px;
@@ -90,3 +91,6 @@ padding-left: 16px; /* Or size of icon + spacing */
    color: #dc679a;
 }
     
+.caret{
+	color:#dc679a;
+}

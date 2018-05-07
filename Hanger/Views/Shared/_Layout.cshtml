@@ -88,7 +88,7 @@
                                     <ul class="dropdown-menu multi-level">
                                         <li><a href="@Url.Action("UserProfil", "UserProfil",new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Twoje przedmioty</a></li>                                     
                                         <li><a href="@Url.Action("Favorites", "UserProfil",new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Ulubione przedmioty</a></li>
-                                        <li><a href="@Url.Action("EditProfil", "Register", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Edytuj profili</a></li>
+                                        <li><a href="@Url.Action("EditProfil", "Register", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id })">Edytuj profil</a></li>
                                     </ul>
                                </li>
                             }
@@ -145,6 +145,17 @@ $(document).ready(function(){
   });
 });
     </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118597196-1"></script>
+    <script>
+  window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-118597196-1');
+    </script>
+
 
     @RenderSection("scripts", required: false)
 </body>

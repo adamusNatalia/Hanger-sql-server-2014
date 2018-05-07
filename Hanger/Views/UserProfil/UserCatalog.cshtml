@@ -21,16 +21,15 @@
                 <div class="pin">
                     <a href="@Url.Action("Product", "Ad", new { id =  Model.ElementAt(j).Id })" class="navbar-left">
                         @{Boolean isPhoto = false; }
-                        @foreach (var item in new Hanger.Models.HangerDatabase().Photos)
+                        @{ int a = Model.ElementAt(j).Id;}
+                        @foreach (var item in new Hanger.Models.HangerDatabase().Photos.Where(i => i.AdId == a && i.Main_photo == true).Select(i => i))
+                        {
+                            if (isPhoto == false)
                             {
-                                if (item.AdId == Model.ElementAt(j).Id && item.Main_photo == true && isPhoto == false)
-                                {
-
-                        <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" /><br />
-                                    isPhoto = true;
-                                }
-
+                                <img src="@System.String.Format("data:{0};base64,{1}", item.Type, Convert.ToBase64String(item.Photo))" /><br />
+                                isPhoto = true;
                             }
+                        }
 
                         @if (isPhoto == false)
                             {

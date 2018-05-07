@@ -15,7 +15,7 @@
             @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
-                <h3 class="page-header"><span class="glyphicon glyphicon-pencil"></span> Dodaj ogłoszenie</h3>
+                <h3 class="page-header">Edytuj profil</h3>
 
                 @Html.ValidationSummary(true)
 
@@ -25,7 +25,7 @@
 
 
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="SizeId">Rozmiar</label>
+                    <label class="control-label col-md-2" for="SizeId">Wybierz swój rozmiar</label>
                     <div class="col-md-10">
                         @Html.DropDownList("SizeId", String.Empty)
                         @Html.ValidationMessageFor(model => model.SizeId)
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Color1Id, "Kolor", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Color1Id, "Wybierz ulubiony kolor", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownList("Color1Id", String.Empty)
                         @Html.ValidationMessageFor(model => model.Color1Id)
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Color2Id, "Kolor", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Color2Id, "Wybierz drugi ulubiony kolor", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownList("Color2Id", String.Empty)
                         @Html.ValidationMessageFor(model => model.Color2Id)
@@ -59,7 +59,7 @@
 
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.BrandId, "Marka", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.BrandId, "Wybierz ulubioną markę", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownList("BrandId", String.Empty)
                         @Html.ValidationMessageFor(model => model.BrandId)
@@ -74,7 +74,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Zapisz i dodaj zdjęcia" class="btn btn-default" />
+                        <input type="submit" value="Zapisz profil" class="btn btn-default" />
                     </div>
                 </div>
 
