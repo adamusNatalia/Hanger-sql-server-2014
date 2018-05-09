@@ -359,6 +359,7 @@
     <Content Include="Pictures\Icons\error.png" />
     <Content Include="Pictures\Icons\favorite-heart.png" />
     <Content Include="Pictures\Icons\hanger.png" />
+    <Content Include="Pictures\Icons\hanger3.png" />
     <Content Include="Pictures\Icons\heart.png" />
     <Content Include="Pictures\Icons\loupe.png" />
     <Content Include="Pictures\Icons\pen.png" />
@@ -474,6 +475,7 @@
     <Content Include="Views\Ad\AdToFavorites.cshtml" />
     <Content Include="Views\Ad\RemoveFromFavorites.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Views\UserProfil\NoFavorites.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

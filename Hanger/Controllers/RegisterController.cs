@@ -70,7 +70,7 @@ namespace Hanger.Controllers
                 }
             }
 
-            return RedirectToAction("NewProfil", "Register", new { id = userId } );
+            return RedirectToAction("Favorites", "UserProfil", new { id = userId } );
         }
 
         public ActionResult NewProfil(int id)

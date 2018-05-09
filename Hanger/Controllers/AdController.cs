@@ -35,7 +35,7 @@ namespace Hanger.Controllers
                                 where (a.Id == Id)
                                 select a;
 
-            const int MaxLength = 10;
+            const int MaxLength = 8;
             var name = advertisement.FirstOrDefault().Date_start.ToString();
 
 
@@ -907,6 +907,14 @@ namespace Hanger.Controllers
 
         public List<int> bayesianRecomendationAlgorithm(int Id)
         {
+            brand = new List<int>();
+            size = new List<int>();
+            subcategory = new List<int>();
+            color = new List<int>();
+            brandInAllAd = new List<int>();
+            sizeInAllAd = new List<int>();
+            subcategoryInAllAd = new List<int>();
+            colorInAllAd = new List<int>();
             int userId = 20;
 
             if (Session["LogedUserID"] != null) {
@@ -921,7 +929,7 @@ namespace Hanger.Controllers
                 // jesli liczba ogloszen w ulubionych jest mniejsza niz 3 to wykonuje poprzedni algorytm
                 if (fav.Count() < 3)
                 {
-                    return randomList(Id);
+                    return ContentFiltering(Id);
                     //return new List<int>(new int[] { 112, 113, 114 });
                 }
 
@@ -930,7 +938,7 @@ namespace Hanger.Controllers
                 IList<Recommendation> rec = bayesianRecommentadion(userId);
                 IList<Recommendation> sortedBayesianList = rec.OrderByDescending(o => o.Rating).ToList();
                 List<int> recommendation = new List<int>();
-                if (sortedBayesianList[2].Rating > 0)
+                if (sortedBayesianList[0].Rating > 0.5)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -944,7 +952,7 @@ namespace Hanger.Controllers
             }
         
            
-             return randomList(Id);
+             return ContentFiltering(Id);
      
 
         }

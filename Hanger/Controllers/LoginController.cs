@@ -147,7 +147,8 @@ namespace Hanger.Controllers
             if (Session["LogedUserID"] != null)
             {
                 //return RedirectToAction("UserProfil", "UserProfil", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id });
-                return RedirectToAction("New", "Catalog");
+                // RedirectToAction("New", "Catalog");
+                return RedirectToAction("Favorites", "UserProfil", new { id = (Session["LogedUserID"] as Hanger.Models.User).Id });
             }
             else
             {
