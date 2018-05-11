@@ -19,6 +19,11 @@ namespace Hanger.Controllers
         {
             return View();
         }
+
+        public ActionResult NoFavorites()
+        {
+            return View();
+        }
         public ActionResult UserCatalog(int id)
         {
             //User user = db.User.Find(id);
@@ -54,7 +59,7 @@ namespace Hanger.Controllers
             ViewBag.profilName = u.Profil_name;
             if (ad.Count() == 0)
             {
-                return RedirectToAction("NoItems", "UserProfil");
+                return RedirectToAction("NoFavorites", "UserProfil");
             }
             return View(ad.ToList());
             //return View(user);

@@ -55,18 +55,6 @@ namespace Hanger.Controllers
                                select p;
 
 
-                    //if (v != null)
-                    //{
-                    //    //Session["LogedUserID"] = v.Id.ToString();
-                    //    Session["CurrentUserEmail"] = v.First();
-                    //    Session["LogedUserFullname"] = v.Profil_name.ToString();
-                    //    if (v.Profil_name.ToString() == "admin")
-                    //    {
-                    //        return RedirectToAction("AfterLoginAdmin");
-                    //    }
-                    //    return RedirectToAction("AfterLogin");
-                    //}
-
                     if (user.Count() != 0)
                     {
                         Session["LogedUserID"] = user.First();
@@ -110,24 +98,12 @@ namespace Hanger.Controllers
                     var user = from p in db.User
                                where p.Profil_name == u.Profil_name && p.Password == u.Password
                                select p;
-
-
-                    //if (v != null)
-                    //{
-                    //    //Session["LogedUserID"] = v.Id.ToString();
-                    //    Session["CurrentUserEmail"] = v.First();
-                    //    Session["LogedUserFullname"] = v.Profil_name.ToString();
-                    //    if (v.Profil_name.ToString() == "admin")
-                    //    {
-                    //        return RedirectToAction("AfterLoginAdmin");
-                    //    }
-                    //    return RedirectToAction("AfterLogin");
-                    //}
-
+                 
                     if (user.Count() != 0)
                     {
                         Session["LogedUserID"] = user.First();
-                        return RedirectToAction("AfterLogin");
+                        // return RedirectToAction("AfterLogin");
+                        return RedirectToAction("New", "Catalog");
                     }
 
 

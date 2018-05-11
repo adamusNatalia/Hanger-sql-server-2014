@@ -54,23 +54,35 @@ namespace Hanger.Controllers
 
                     U = null;
 
-                    //if (v != null)
-                    //{
-                    //    //Session["LogedUserID"] = v.Id.ToString();
-                    //    Session["CurrentUserEmail"] = v.First();
-                    //    Session["LogedUserFullname"] = v.Profil_name.ToString();
-                    //    if (v.Profil_name.ToString() == "admin")
-                    //    {
-                    //        return RedirectToAction("AfterLoginAdmin");
-                    //    }
-                    //    return RedirectToAction("AfterLogin");
-                    //}
 
 
                 }
             }
 
-            return RedirectToAction("Favorites", "UserProfil", new { id = userId } );
+            //return RedirectToAction("Favorites", "UserProfil", new { id = userId } );
+
+            //return RedirectToAction("New", "Catalog");
+            return RedirectToAction("AfterRegister", "Register",new { id = userId } );
+        }
+
+        public ActionResult AfterRegister(int id)
+        {
+            if (ModelState.IsValid) // this is check validity
+            {
+
+                var user = from p in db.User
+                           where p.Id == id
+                           select p;
+
+                if (user.Count() != 0)
+                {
+                    Session["LogedUserID"] = user.First();
+                    // return RedirectToAction("AfterLogin");
+                }
+
+
+            }
+            return RedirectToAction("New", "Catalog");
         }
 
         public ActionResult NewProfil(int id)

@@ -7,7 +7,8 @@
 @Styles.Render("~/css/contact.css")
 
 
-<h2 class="page-header"><img alt="Brand" src="~/Pictures/Icons/user1.png" class="img-header"> Moje ogłoszenia</h2>
+<h2 class="page-header"><img alt="Brand" src="~/Pictures/Icons/user1.png" class="img-header"> Twoje ogłoszenia @ViewBag.profilName</h2>
+
 
 @{ int j = Model.Count() - 1;}
 <div id="wrapper">
